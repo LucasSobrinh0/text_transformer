@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transformador de Texto</title>
+    <style>
+        body, html {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #333;
+        }
+
+        h1 {
+            color: #343a40;
+            margin-bottom: 10px;
+            margin-top: 10vh;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 320px;
+            text-align: center;
+        }
+
+        textarea {
+            width:320px; /* 280px to fit within the form width of 320px with some padding */
+            height: 200px;
+            margin-bottom: 10px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            resize: none; /* Disable resizing of the textarea */
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            width: 100%; /* Makes the buttons expand to the full width of the form */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: #343a40;
+        }
+
+        p#resultText {
+            background-color: #e9ecef;
+            border-radius: 5px;
+            word-wrap: break-word; /* Ensures that long words will wrap and not expand the container */
+            width: 320px; /* Same width as the textarea to maintain consistency */
+            text-align: left; /* Aligns the text to the left */
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+    <script>
+        function copyToClipboard() {
+            const copyText = document.getElementById("resultText");
+            navigator.clipboard.writeText(copyText.innerText).then(() => {
+                alert('Texto copiado com sucesso!');
+            }).catch(err => {
+                alert('Erro ao copiar texto: ', err);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Transformador de Texto</h1>
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="text" rows="12" cols="50" maxlength="1000">{{ original_text }}</textarea><br>
+        <input type="submit" name="operation" value="uppercase" >
+        <input type="submit" name="operation" value="lowercase" >
+        <input type="submit" name="operation" value="capitalize" >
+        <input type="submit" name="operation" value="title" >
+        <input type="submit" name="operation" value="reverse" >
+    </form>
+    {% if result %}
+        <h2>Resultado:</h2>
+        <p id="resultText">{{ result }}</p>
+        <button onclick="copyToClipboard()">Copiar Resultado</button>
+    {% endif %}
+    <div style="height: 20vh;"></div>
+</body>
+</html>
